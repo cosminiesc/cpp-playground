@@ -17,9 +17,9 @@ void printOddOrEven(int number)
 
 int main(int argc, char *argv[])
 {
-	int number = -13;
-
-	// What is this program expected to do?
+	try 
+	{
+		// What is this program expected to do?
 	// - Shows whether an argument is an ODD or EVEN number.
 	// How to launch it?
 	// - Execute the binary and pass a parameter to it?
@@ -31,27 +31,31 @@ int main(int argc, char *argv[])
 	//		
 
 	// Make sure there are some program arguments available.
-	if (argc <= 1)
-	{
-		printf("No program arguments found.\n");
+		if (argc <= 1)
+		{
+			printf("No program arguments found.\n");
+		}
+
+		// TODO(Gusti): i don't know why this doesn't work, but someone please FIX it.
+		// --------------- start
+
+		// Get the first argument
+		std::string argumentAsString = argv[1];
+		const char* argumentAsCharArray = argumentAsString.c_str();
+
+		int number = stoi(argumentAsString); // No
+		//should use atoi?
+		// or std::stoi?
+		//Answers: atoi accepts argumentAsCharArray as parameter
+		//        stoi accepts argumentAsString as parameter
+		printOddOrEven(number); // i think this should be removed
+
+		// --------------- stop
 	}
-	
-	// TODO(Gusti): i don't know why this doesn't work, but someone please FIX it.
-	// --------------- start
-
-	// Get the first argument
-	std::string argumentAsString = argv[1];
-	const char* argumentAsCharArray = argumentAsString.c_str();
-
-	//number = argv[1]; // No
-	//should use atoi?
-	// or std::stoi?
-
-	std::cout << argumentAsString << std::endl; // i think this should be removed
-
-	// --------------- stop
-
-	printOddOrEven(number);
+	catch (...)
+	{
+		std::cout << "NAN";
+	}
 
 	return 0;
 }
