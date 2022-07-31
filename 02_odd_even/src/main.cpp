@@ -15,47 +15,45 @@ void printOddOrEven(int number)
 	}
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
-	try 
-	{
-		// What is this program expected to do?
-	// - Shows whether an argument is an ODD or EVEN number.
-	// How to launch it?
-	// - Execute the binary and pass a parameter to it?
-	// - E.g. Open CMD in bin/Debug or bin/Release
-	//		  02_odd_even.exe 1		=> Output: ODD
-	//		  02_odd_even.exe 2		=> Output: EVEN
-	//		  02_odd_even.exe 		=> Output: No program arguments found.
-	//		  02_odd_even.exe ABC   => Undefined output (do whatever).
-	//		
 
-	// Make sure there are some program arguments available.
-		if (argc <= 1)
+	// What is this program expected to do?
+// - Shows whether an argument is an ODD or EVEN number.
+// How to launch it?
+// - Execute the binary and pass a parameter to it?
+// - E.g. Open CMD in bin/Debug or bin/Release
+//		  02_odd_even.exe 1		=> Output: ODD
+//		  02_odd_even.exe 2		=> Output: EVEN
+//		  02_odd_even.exe 		=> Output: No program arguments found.
+//		  02_odd_even.exe ABC   => Undefined output (do whatever).
+//		
+
+	if (argc <= 1)
+	{
+		printf("No program arguments found.\n");
+		return 0;
+	}
+
+	std::string argumentAsString = argv[1];
+	bool isValid = true;
+	const char* argumentAsCharArray = argumentAsString.c_str();
+
+	for (int i = 0; i < strlen(argumentAsCharArray); i++)
+	{
+		if (isdigit(argumentAsCharArray[i])==false)
 		{
-			printf("No program arguments found.\n");
+			printf("NAN");
+			isValid = false;
+			break;
 		}
-
-		// TODO(Gusti): i don't know why this doesn't work, but someone please FIX it.
-		// --------------- start
-
-		// Get the first argument
-		std::string argumentAsString = argv[1];
-		const char* argumentAsCharArray = argumentAsString.c_str();
-
-		int number = stoi(argumentAsString); // No
-		//should use atoi?
-		// or std::stoi?
-		//Answers: atoi accepts argumentAsCharArray as parameter
-		//        stoi accepts argumentAsString as parameter
-		printOddOrEven(number); // i think this should be removed
-
-		// --------------- stop
 	}
-	catch (...)
-	{
-		std::cout << "NAN";
-	}
+
+		if (isValid)
+		{
+			int number = stoi(argumentAsString);
+			printOddOrEven(number);
+		}
 
 	return 0;
 }
