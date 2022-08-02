@@ -1,8 +1,34 @@
 #include <iostream>
+#include<string>
 
 bool isArmstrongNumber(int number)
 {
-	// TODO: implement some functionality to see if this number is an armstrong number
+	int copyNumber = number, currentDigit = 0, numberDigits = 0, sumArmstrong=0;
+
+	/* - getting the number of digits - first method (scrolling through the digits of the number)
+	while (copyNumber)
+	{
+		numberDigits++;
+		copyNumber/=10;
+	}*/
+
+	//getting the number of digits - second method (mathematical formula)
+	int numbersDigits = int(log10(number) + 1);
+	
+	while (copyNumber)
+	{
+		currentDigit = copyNumber%10;
+		
+		sumArmstrong += pow(currentDigit, numbersDigits);
+		
+		copyNumber /= 10;
+		
+	}
+
+	if (sumArmstrong == number)
+	{
+		return true;
+	}
 
 	return false;
 }
@@ -47,12 +73,60 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	int readNumber = 0;
 	// Get the first argument
+    // TODO: read number / cast to integer
 	std::string argumentAsString = argv[1];
+	const char* argumentAsCharArray = argumentAsString.c_str();
+	for (int i = 0; i < strlen(argumentAsCharArray); i++)
+	{
+		if (isdigit(argumentAsCharArray[i]) == false)
+		{
+			printf("NAN\n");
+			printf("Do you want to try from console?[Y/N]\n");
+			std::string option="";
+			std::cin >> option;
+			if (option == "Y")
+			{
+				double readNumber = 0;
+				bool isInCatch = false;
+				std::cout << "Hello! We are in console" << std::endl << "Please insert an integer number!" << std::endl;
+				try
+				{
+					std::cin >>  readNumber;
+				}
+				catch (int readNumber)
+				{
 	
-	// TODO: read number / cast to integer
+					readNumber = NULL;
+				}
+			
+				if (readNumber == NULL)
+				{
+					std::cout << "It is not a valid number";
+					return 0;
+				}
+				else
+				{
+					printIsArmstrong((int)readNumber);
+					return 0;
+				}
+ 
+			}
+			else if (option == "N")
+			{
+				return 0;
+			}
+			else
+			{
+				std::cout << "Invalid option";
+				return 0;
+			}
+			
+		}
+	}
+	
+	int number = stoi(argumentAsString);
+    printIsArmstrong(number);
 
-	printIsArmstrong(readNumber);
 	return 0;
 }
