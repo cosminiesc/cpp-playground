@@ -1,6 +1,8 @@
 ﻿#include <iostream>
 #include <string>
 #include <vector>
+#include<fstream>
+#include <sstream>
 
 /**
 	Define a simple book.
@@ -22,7 +24,7 @@ public:
 	Reads a vector of books from a text file.
 	Note: the text file shall contain lines of text in pairs for the book name and authors
 	E.g.
-		BOOK 1
+		BOOK  1
 		AUTHOR 1
 		BOOK 2
 		AUTHOR 2
@@ -35,11 +37,45 @@ std::vector<Book> readBooksFromTextFile(const std::string& file_name)
 {
 	std::vector<Book> results;
 	// TODO: BEGIN read the file -------------------------------------
+   
+	Book myBook;
 
+	int numberLine = 0;
+	std::string buffer;
+	std::ifstream inFile(file_name);
 
-	// E.g. Book myBook;
-	//		...
-	//		results.emplace_back(myBook);
+	if (!inFile)
+	{
+		std::cout << "Unable to open file";
+		exit(EXIT_FAILURE);
+	}
+	while (std::getline(inFile, buffer))
+	{   
+		std::istringstream lineStream(buffer);
+		std::string name;
+		while (lineStream >> name)
+		{
+			if (numberLine % 2 == 0)
+			{
+				myBook.name += " " + name;
+			}
+			else
+			{
+				myBook.authors += " " + name;
+			}
+		}
+
+		if (numberLine % 2 == 1)
+		{
+			results.emplace_back(myBook);
+			myBook.name = "";
+			myBook.authors = "";
+		}
+
+		numberLine++;
+	}
+
+	inFile.close();
 
 	// TODO: END read file and add to results vector ------------------
 	return results;

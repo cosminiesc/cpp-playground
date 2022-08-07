@@ -5,6 +5,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include<fstream>
 
 // 3rd party libs headers
 #include <SimpleIni.h>
@@ -48,15 +49,28 @@ std::vector<Book> readBooksFromIniFile(const std::string& file_name)
 	std::vector<Book> results;
 	// TODO: BEGIN read the file -------------------------------------
 	
-	// E.g. Book myBook;
-	//		// build the section name (E.g. book.1)
-	//		std::stringstream ss;
-	//		ss << "book." << (i + 1);
-	//		// Copy the stream to a string you can use
+	 Book myBook;
 	//		std::string section_name(ss.str());
 
-	//		...
-	//		results.emplace_back(myBook);
+	int numberLine = 0,i=0;
+
+	std::string buffer;
+	std::ifstream inFile(file_name);
+	std::stringstream ss;
+
+	if (!inFile)
+	{
+		std::cout << "Unable to open file";
+		exit(EXIT_FAILURE);
+	}
+
+	/*
+	while (std::getline(inFile, buffer))
+	{
+
+	}*/
+
+	inFile.close();
 
 	// TODO: END read file and add to results vector ------------------
 	return results;
@@ -68,7 +82,7 @@ int main()
 	// Using the SimpleINI C++ Lib: https://github.com/brofield/simpleini
 
 	// Read the data
-	std::string input_data("PATH_TO_INI_FILE.ini");
+	std::string input_data("../../data/ermahgerd_berks.ini");
 	std::cout << "Reading the data from " << input_data << std::endl;
 	std::vector<Book> books_from_file = readBooksFromIniFile(input_data);
 

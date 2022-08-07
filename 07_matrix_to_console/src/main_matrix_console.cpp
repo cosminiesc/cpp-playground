@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 #include <string>
 #include <vector>
+#include<sstream>
 
 /**
 	Define a simple matrix.
@@ -13,24 +14,32 @@ private:
 
 	// TODO: store the data
 	// hints: you can use std::string, std::vectors + string, char**, vector<vector<char>>, etc
+	std::vector<std::string> lines;
+
 public:
 	Matrix(size_t numColumnsX, size_t numLinesY)
 		// TODO: add functionality
 	{
-		// TODO: add functionality
+		this->column_count = numColumnsX;
+		this->line_count = numLinesY;
 	}
 
 	// Set an entire line
 	void setLine(size_t line_number, const std::string& data)
 	{
+			lines.push_back(data);
 	}
 
 	//OPTIONAL
-	//char getCellXY(size_t x, size_t y, char cell_content)
-	//{
-	//	// TODO: add functionality
-	//	return 0;
-	//}
+	char getCellXY(size_t x, size_t y)
+	{
+		// TODO: add functionality
+
+		char cell_content = lines[y][x];
+
+		return cell_content;
+	}
+	//
 
 	/**
 		Sets the cell content for a specific cell identified by its coordinates (X and Y)
@@ -54,13 +63,31 @@ public:
 	*/
 	void setCellXY(size_t x, size_t y, char cell_content)
 	{
-		// TODO: add functionality
+		if (x > column_count)
+		{
+			std::cout << "X=" << x << "invalid due to limited height"<<std::endl;
+		}
+		else if (y > line_count)
+		{
+			std::cout << "Y= " << y << " invalid due to limited height"<<std::endl;
+		}
+		else
+		{
+			lines[y][x] = cell_content;
+		}
+		
 	}
 
 	void print()
 	{
 		// print all lines and columns
 		// TODO: add functionality
+		
+		for (int i = 0; i < lines.size(); i++)
+		{
+			std::cout << lines[i] << std::endl;
+		}
+		std::cout << "\n";
 	}
 };
 
@@ -107,8 +134,8 @@ X-----X----X-----XX-
 -----------------X--
 -------------------X
 ------------------X-
------------------X--
-*/
+-----------------X--*/
+
 
 	matrix.setCellXY(3, 7, 'O');
 	matrix.print();
@@ -127,5 +154,8 @@ X-----X----X-----XX-
 
 	// This should silently fail (not trigger an error): cell Y=11 invalid due to limited height.
 	matrix.setCellXY(3, 11, 'O');
+	matrix.print();
+
+	std::cout<< "The first character in matrix is: "<< matrix.getCellXY(0, 0)<<std::endl;
 	return 0;
 }
