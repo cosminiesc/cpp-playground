@@ -5,7 +5,8 @@
 #include <sstream>
 #include <string>
 #include <vector>
-#include<fstream>
+#include<SimpleIni.h>
+
 
 // 3rd party libs headers
 #include <SimpleIni.h>
@@ -50,27 +51,42 @@ std::vector<Book> readBooksFromIniFile(const std::string& file_name)
 	// TODO: BEGIN read the file -------------------------------------
 	
 	 Book myBook;
-	//		std::string section_name(ss.str());
+	 std::vector<Book> allBooks;
+	 std::string curentSection;
+	
+	 CSimpleIniA ini;
+	 ini.SetUnicode();
 
-	int numberLine = 0,i=0;
+	 SI_Error rc = ini.LoadFile(file_name.c_str());
+	 if (rc < 0) 
+	 {
+		 std::cout << "Unable to open the file" << std::endl;
+	 }
+	 else
+	 {
+		 int numberBooks = std::stoi(ini.GetValue("books", "count"));
 
-	std::string buffer;
-	std::ifstream inFile(file_name);
-	std::stringstream ss;
+		 for (int i = 0; i < numberBooks; i++)
+		 {
+			 curentSection = "book." + std::to_string(i+1);
+			 myBook.name = ini.GetValue(curentSection.c_str(), "name");
+			 myBook.authors = ini.GetValue(curentSection.c_str(), "author");
+			 results.push_back(myBook);
+		 }
 
-	if (!inFile)
-	{
-		std::cout << "Unable to open file";
-		exit(EXIT_FAILURE);
-	}
+		 return results;
+	 }
+	 
 
-	/*
-	while (std::getline(inFile, buffer))
-	{
+	 /*// get all sections
+	 CSimpleIniA::TNamesDepend sections;
+	 ini.GetAllSections(sections);
 
-	}*/
+	 //getting values
+	 const char* pv;
+	 pv = ini.GetValue("section1", "key99");*/
+	 
 
-	inFile.close();
 
 	// TODO: END read file and add to results vector ------------------
 	return results;
