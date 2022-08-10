@@ -1,7 +1,6 @@
 #include <iostream>
 #include<windows.h>
 
-
 using namespace std;
 
 // creates row boundary
@@ -33,11 +32,131 @@ int count_live_neighbour_cell(int **matrix, int dim1,int dim2,int row, int col)
     return count;
 }
 
+bool isValidShape(std::string str)
+{
+    if (str != "Block" && str != "Blinker" && str != "Beacon" && str != "Boat")
+    {
+        return false;
+    }
+    return true;
+}
+
+int** DrawShape(std::string nameShape, int X, int Y)
+{
+    int** matrix = new int* [X];
+    for (int i = 0; i < Y; i++)
+        matrix[i] = new int[Y];
+
+    if (nameShape == "Block")
+    {
+        for (int i = 0; i < X; i++) 
+        {
+            for (int j = 0; j < Y; j++)
+            {
+                if ((i == 0 && (j == 0 || j == 1)) || (i == 1 && (j == 0 || j == 1)) )
+                {
+                    matrix[i][j]=1;
+                }
+                else
+                {
+                    matrix[i][j] = 0;
+                }
+           }
+       }
+    }
+    else if (nameShape == "Boat")
+    {
+        for (int i = 0; i < X; i++)
+        {
+            for (int j = 0; j < Y; j++)
+            {
+                if ((i == 0 && (j == 0 || j == 1)) || (i == 1 && (j == 0 || j == 2)) || (i==2 && j==1))
+                {
+                    matrix[i][j] = 1;
+                }
+                else
+                {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+    }
+    else if (nameShape == "Blinker")
+    {
+        for (int i = 0; i < X; i++)
+        {
+            for (int j = 0; j < Y; j++)
+            {
+                if (i == X / 2  && (j==1 || j==2 || j==3))
+                {
+                    matrix[i][j] = 1;
+                }
+                else
+                {
+                    matrix[i][j] = 0;
+                }
+                
+            }
+        }
+    }
+    else if (nameShape == "Beacon")
+    {
+        for (int i = 0; i < X; i++)
+        {
+            for (int j = 0; j < Y; j++)
+            {
+                if (i == 0 && j==0 )
+                {
+                    matrix[i][j] = matrix[i][j + 1]= matrix[i + 1][j]= matrix[i + 2][j + 3]= matrix[i + 3][j + 2]= matrix[i + 3][j + 3] = 1;
+                   
+                }
+                else
+                {
+                    if (matrix[i][j] != 1)
+                    {
+                        matrix[i][j] = 0;
+                    }
+                }
+
+            }
+        }
+    }
+    else if (nameShape == "Glider")
+    {
+        for (int i = 0; i < X; i++)
+        {
+            for (int j = 0; j < Y; j++)
+            {
+                if (i == X / 2 && (j == 1 || j == 2 || j == 3))
+                {
+                    matrix[i][j] = 1;
+                }
+                else
+                {
+                    matrix[i][j] = 0;
+                }
+
+            }
+        }
+    }
+    else
+    {
+        for (int i = 0; i < X; i++)
+        {
+            for (int j = 0; j < Y; j++)
+            {
+                matrix[i][j] = 0;
+            }
+        }
+    }
+
+    return matrix;
+}
+
 int main()
 {
-    int **a, **b,option,row=0,col=0,numberTicks=0,counter=0;
-    int i, j;
-    int neighbour_live_cell;
+    int **a, **b,option,row=0,col=0,numberTicks=0,counter=0,i,j, neighbour_live_cell;
+    std::string desiredShape;
 
    cout << "Welcome to the game!" << endl;
    cout << "\nPlease choose an option" << endl;
@@ -81,17 +200,28 @@ int main()
    cout << "\nInsert number of ticks: ";
    cin >> numberTicks;
 
+   cout << "\nWhat shape do you wanna?\n";
+
+   cin >> desiredShape;
+  
+   if (!isValidShape(desiredShape))
+   {
+       return 0;
+   }
    system("CLS");
+
+   a = DrawShape("Beacon", row, col);
 
    do 
    {
-       for (i = 0; i < row; i++) {
-           for (j = 0; j < col; j++) {
-               a[i][j] = rand() % 2;
-           }
-       }
-
-       cout << "Current Stage:";
+       /*for(i=0;i<row;i++)
+           for(j=0;j<col;j++)
+           { 
+               a[i][j] = rand()%2;
+           }*/
+       
+       cout << "Is it fun, isn't it? :D" << endl;
+       cout << "\nCurrent Stage (" << counter << ")";
        row_line(col);
        for (i = 0; i < row; i++) {
            cout << ":";
@@ -122,7 +252,7 @@ int main()
            }
        }
 
-       cout << "\nNext Generation:";
+       cout << "\nNext Generation ("<<counter+1<<")";
        row_line(col);
        for (i = 0; i < row; i++) {
            cout << ":";
@@ -139,9 +269,10 @@ int main()
  
    } while (numberTicks!=counter);
 
+   delete[]a;
+   delete[] b;
 
-
-    return 0;
+   return 0;
 }
 
 
